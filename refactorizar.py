@@ -14,7 +14,7 @@ tr_elements = doc.xpath('//tr')
 [len(T) for T in tr_elements[:12]]
 
 tr_elements = doc.xpath('//tr')
-#Create empty list
+
 col=[]
 i=0
 #For each row, store each first element (header) and an empty list
@@ -23,6 +23,23 @@ for t in tr_elements[0]:
     name=t.text_content()
     print '%d:"%s"'%(i,name)
     col.append((name,[]))
+
+#  //////////////////////////////
+#  Step 1 for refactoring above code
+#  if setting var to 0 outside loop and then incrementing, you can use enumerate
+
+#  col=[]
+#  for i, t in enumerate(tr_elements[0])
+
+#  But appears the i is only needed for the print so we can take this out and use a list comprehension
+col = [t.text_content, [], for t in tr_elements[0]]
+
+# ////////////////////////////////
+
+
+
+
+
 
 #Since out first row is the header, data is stored on the second row onwards
 for j in range(1,len(tr_elements)):
