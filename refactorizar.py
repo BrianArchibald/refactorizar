@@ -36,6 +36,8 @@ col = [t.text_content, [], for t in tr_elements[0]]
 
 # ////////////////////////////////
 
+#  Anti pattern  ITM  Initialize then modify.  Avoid this!
+
 
 
 
@@ -45,28 +47,38 @@ col = [t.text_content, [], for t in tr_elements[0]]
 for j in range(1,len(tr_elements)):
     #T is our j'th row
     T=tr_elements[j]
+
+# ///////////////////////////////////  use slice
+for T in tr_elements[1:]:
+
     
     #If row is not of size 10, the //tr data is not from our table 
-    if len(T)!=10:
-        break
+    # This was not needed and commented out ///
+#    if len(T)!=10:
+#        break
     
     #i is the index of our column
-    i=0
+    # i=0  /////part of ITM pattern again
     
     #Iterate through each element of the row
-    for t in T.iterchildren():
+    for i, t in (T.iterchildren()):
         data=t.text_content() 
         #Check if row is empty
-        if i>0:
+       # if i>0: ///// not needed for pokemon db
+
         #Convert any numerical value to integers
-            try:
-                data=int(data)
-            except:
-                pass
+        # ////// changing this try except to conditional exp
+         #   try:
+         #       data=int(data)
+         #   except:
+          #      pass
+         col[i][1].append(int(data) if data.isnumeric() else data)
+
         #Append the data to the empty list of the i'th column
-        col[i][1].append(data)
+        # col[i][1].append(data) ////////// moved this append to above
+        
         #Increment i for the next column
-        i+=1
+        # i+=1 ///// out due to ITM
 
 Dict={title:column for (title,column) in col}
 df=pd.DataFrame(Dict)
